@@ -24,6 +24,8 @@ Our plan...
 ### DAW
 -Reaper
 -ReaScript
+  - [ReaScript Documentation](https://www.reaper.fm/sdk/reascript/reascripthelp.html)
+  - [Reascript Documentation for Python](https://www.reaper.fm/sdk/reascript/reascripthelp.html#p)
 
 ### parameters
 Gain:
