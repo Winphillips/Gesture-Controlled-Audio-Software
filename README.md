@@ -10,7 +10,7 @@
 ## Overview:
 Our plan...
 
-![process flowchart](Gesture-Controlled-Audio-Software/img/CapstoneProposalFlowchart.png)
+![process flowchart](img/CapstoneProposalFlowchart.png)
 
 ## Computer Vision
 ### Action Recogniton
