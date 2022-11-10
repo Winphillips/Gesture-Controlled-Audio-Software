@@ -3,8 +3,10 @@
 ### Setup
 1. Download [Reaper](https://www.reaper.fm/download.php)
 2. Install [Python](https://www.python.org/downloads/) if not on machine
-3. Open Reaper, navigate to Actions > show actions list... > Search "Reascript" > Run ReaScript
-4. Select "file_name.py" and press Run
+3. Run Reaper
+4. Navigate to Options > Preferences(Ctrl + P) > Plug-ins > ReaScripts > Enable Python
+5. Navigate to Actions > show actions list... > Search "Reascript" > Run ReaScript
+6. Select "file_name.py" and press Run
 
 
 ## Overview:
