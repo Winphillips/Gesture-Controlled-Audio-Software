@@ -1,12 +1,14 @@
 # Gesture-Controlled-Audio-Software
 *CSCE 4561 - Capstone I/CSCE 4963 Capstone II Project. Using Computer Vision Action Recognition for Gesture Controlling Audio Software VST's.*
 ### Setup
-1. Download [Reaper](https://www.reaper.fm/download.php)
-2. Install [Python](https://www.python.org/downloads/) if not on machine
-3. Run Reaper
-4. Navigate to Options > Preferences(Ctrl + P) > Plug-ins > ReaScripts > Enable Python
-5. Navigate to Actions > show actions list... > Search "Reascript" > Run ReaScript
-6. Select "file_name.py" and press Run
+1. Install [pedalboard](https://github.com/spotify/pedalboard)
+```
+pip install pedalboard
+```
+2. Install [PySimpleGUI](https://www.pysimplegui.org/en/latest/)
+```
+pip install PySimpleGUI
+```
 
 
 ## Overview:
@@ -26,17 +28,15 @@ Our plan...
 
 ## Audio control
 ### DAW
--Reaper
--ReaScript
-  - [ReaScript Documentation](https://www.reaper.fm/sdk/reascript/reascripthelp.html)
-  - [Reascript Documentation for Python](https://www.reaper.fm/sdk/reascript/reascripthelp.html#p)
+-PySimpleGUI for interface
+-pedalboard for audio processing
 
 ### parameters
-Gain:
+Gain: -24 to +24
 
-Stereo Pan:
+Stereo Pan: [L]-64 to +64[R]
 
-Equilization:
+Equilization: Lo-pass band & Hi-pass band
 
 
 ## Resources
