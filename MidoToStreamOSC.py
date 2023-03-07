@@ -14,18 +14,19 @@ IN_FILE = "test.mid"
 SOURCE_IP = "127.0.0.1"
 
 #The SOURCE_PORT should be the port the OSC message is being received through.
-SOURCE_PORT = "0115"
+SOURCE_PORT = "1115"
 
 #The ADDRESS should be the OSC address.
 ADDRESS = "/MIDI/adjust"
 
 #The MIDI_OUT should be the name of the MIDI port the program sends the notes to.
-MIDI_OUT = "chipOut 1"
+MIDI_OUT = "Midi Through:Midi Through Port-0 14:0"
 
 #These variables will be used for note adjustment.
 noteAdjust = 0
 velAdjust = 0
 
+#These prints are here for debugging purposes and for helping identify active ports.
 print(mido.get_output_names())
 print(mido.get_input_names())
 
@@ -79,6 +80,11 @@ async def mido_play(fileName):
 
     for message in MidiFile(fileName).play():
         await async_message(message)
+    
+    await asyncio.sleep(1)
+    
+    #This method disables any notes that are still playing after the file ended.
+    midiStream.reset()
     
     trport.close()
 
