@@ -36,7 +36,12 @@ midiStream = mido.open_output(MIDI_OUT)
 def adjust_note(messageIn, noteAdjustIn, velAdjustIn):
     #The adjusted values are held in these variables to check for boundary cases.
     noteTemp = noteAdjustIn + messageIn.note
-    velTemp = velAdjustIn + messageIn.velocity
+    
+    #Some MIDI files use 0 velocity note_on messages as note_offs. This branch helps preserve that behavior.
+    if messageIn.velocity != 0:
+        velTemp = velAdjustIn + messageIn.velocity
+    else:
+        velTemp = 0
 
     if noteTemp > 127:
         noteTemp = 127
@@ -70,11 +75,16 @@ dispatcher.map(ADDRESS, osc_note)
 async def async_message(messageIn):
     global noteAdjust
     global velAdjust
-    midiStream.send(adjust_note(messageIn, copy.deepcopy(noteAdjust), copy.deepcopy(velAdjust)))
+    #Only note messages should be adjusted. Any other type of message is played as normal.
+    if messageIn.type == "note_on" or messageIn.type == "note_off":
+        midiStream.send(adjust_note(messageIn, copy.deepcopy(noteAdjust), copy.deepcopy(velAdjust)))
+    else:
+        midiStream.send(messageIn)
     await asyncio.sleep(0)
 
 #Plays the MIDI file.
 async def mido_play(fileName):
+    global midiStream
     server = AsyncIOOSCUDPServer((SOURCE_IP, SOURCE_PORT), dispatcher, asyncio.get_event_loop())
     trport, proto = await server.create_serve_endpoint()
 
