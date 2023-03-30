@@ -9,36 +9,7 @@ with AudioFile('base.wav').resampled_to(samplerate) as f:
   #print(f.num_channels)
   
 
-'''
-passthrough = Gain(gain_db=0)
-
-delay_and_pitch_shift = Pedalboard([
-  Delay(delay_seconds=0.25, mix=1.0),
-  PitchShift(semitones=12),
-  Gain(gain_db=-3),
-])
-
-delay_longer_and_more_pitch_shift = Pedalboard([
-  Delay(delay_seconds=0.5, mix=1.0),
-  PitchShift(semitones=-12),
-  Gain(gain_db=-6),
-])
-
-board = Pedalboard([
-  # Put a compressor at the front of the chain:
-  Compressor(),
-  # Run all of these pedalboards simultaneously with the Mix plugin:
-  Mix([
-    passthrough,
-    delay_and_pitch_shift,
-    delay_longer_and_more_pitch_shift,
-  ]),
-  # Add a reverb on the final mix:
-  Reverb()
-])
-'''
-
-# Make a pretty interesting sounding guitar pedalboard:
+# Effects Go here
 board = Pedalboard([
     #Reverb(room_size=0.30, wet_level=0.4, dry_level=0.2),
     #HighpassFilter(),
