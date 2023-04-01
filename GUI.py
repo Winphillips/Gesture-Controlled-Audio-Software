@@ -1,19 +1,21 @@
 import PySimpleGUI as sg
 
-
+#TROY: Paths to other files are stored in global constants for easier modification.
+LOGO_PATH = 'img/logo.png'
+SAMPLE_PATH = 'img/sample_camera_image.png'
 
 # Define the layout of the GUI
 layout = [
     [sg.Text('SoundWave', font=('Courier New', 20), justification='center', size=(40, 1)),
-     sg.Image(filename='logo.png', key='-IMAGE-', size=(25, 25),pad=(0,0))],
-    [sg.Text('Gain:', size=(10, 1)), sg.Slider(range=(-24, 24), orientation='h', size=(20, 20), default_value=0)],
-    [sg.Text('Reverb:', size=(10, 1)), sg.Slider(range=(0, 100), orientation='h', size=(20, 20), default_value=50)],
+     sg.Image(filename=LOGO_PATH, key='-IMAGE-', size=(25, 25),pad=(0,0))],
+    [sg.Text('Gain:', size=(10, 1)), sg.Slider(key='-GAIN-', range=(-24, 24), orientation='h', size=(20, 20), default_value=0)],
+    [sg.Text('Reverb:', size=(10, 1)), sg.Slider(key='-REVERB-', range=(0, 100), orientation='h', size=(20, 20), default_value=50)],
     [sg.Text('Delay Time:', size=(10, 1)),
-     sg.Slider(range=(0, 1000), orientation='h', size=(20, 20), default_value=500)],
-    [sg.Text('Delay Mix:', size=(10, 1)), sg.Slider(range=(0, 100), orientation='h', size=(20, 20), default_value=50)],
+     sg.Slider(key='-DEL_TIME-', range=(0, 1000), orientation='h', size=(20, 20), default_value=500)],
+    [sg.Text('Delay Mix:', size=(10, 1)), sg.Slider(key='-DEL_MIX-', range=(0, 100), orientation='h', size=(20, 20), default_value=50)],
     [sg.Text('Distortion:', size=(10, 1)),
-     sg.Slider(range=(0, 100), orientation='h', size=(20, 20), default_value=0)],
-    [sg.Text('Lowpass:', size=(10, 1)), sg.Slider(range=(0, 100), orientation='h', size=(20, 20), default_value=0)],
+     sg.Slider(key='-DISTORTION-', range=(0, 100), orientation='h', size=(20, 20), default_value=0)],
+    [sg.Text('Lowpass:', size=(10, 1)), sg.Slider(key='-LOWPASS-', range=(0, 100), orientation='h', size=(20, 20), default_value=0)],
     [sg.Image(filename='', background_color='turquoise', key='-IMAGE-', size=(400, 240))],
     [sg.Button('Start', size=(10, 1)), sg.Button('Stop', size=(10, 1)), sg.Button('Exit', size=(10, 1))]
 ]
@@ -32,7 +34,7 @@ while True:
         x, y = values['-GRAPH-']
         print(f'Clicked at x={x}, y={y}')
     if event == 'Start':
-        window['-IMAGE-'].update(filename='sample_camera_image.png')
+        window['-IMAGE-'].update(filename=SAMPLE_PATH)
     if event == 'Stop':
         window['-IMAGE-'].update(filename='')
 
