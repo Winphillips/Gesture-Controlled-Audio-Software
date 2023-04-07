@@ -3,11 +3,13 @@ from pedalboard.io import AudioFile
 
 # Read in a whole file, resampling to our desired sample rate:
 samplerate = 44100.0
-with AudioFile('base.wav').resampled_to(samplerate) as f:
+with AudioFile('audio/base.wav').resampled_to(samplerate) as f:
   audio = f.read(f.frames)
   #print(f.samplerate)
   #print(f.num_channels)
   
+#VARIABLES
+track_gain = 5
 
 # Effects Go here
 board = Pedalboard([
@@ -15,7 +17,7 @@ board = Pedalboard([
     #HighpassFilter(),
     #LowpassFilter(),
     Distortion(drive_db=20),
-    Gain(gain_db=-15)
+    Gain(gain_db=track_gain)
 ])
 
 # Pedalboard objects behave like lists, so you can add plugins:

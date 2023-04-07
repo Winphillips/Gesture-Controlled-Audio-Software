@@ -16,7 +16,7 @@ with AudioStream(
       Gain(gain_db=30),
       Chorus(),
       Phaser(),
-      Convolution("./demo.wav", 1.0),
+      Convolution(".audio/demo.wav", 1.0),
       Reverb(room_size=0.25),
   ])
   input("Press enter to stop streaming...")
