@@ -9,10 +9,13 @@ pip install pedalboard
 ```
 pip install PySimpleGUI
 ```
+3. Install [python-osc](https://pypi.org/project/python-osc/)
+```
+pip install python-osc
+```
 
 
 ## Overview:
-Our plan...
 
 ![process flowchart](img/CapstoneProposalFlowchart.png)
 
@@ -36,10 +39,19 @@ Gain: -24 to +24
 
 Stereo Pan: [L]-64 to +64[R]
 
-Equilization: Lo-pass band & Hi-pass band
+Delay: 0ms to 1000ms | Mix 0%-100%
+
+Reverb
+
+Distortion
+
+Equilization: Lo-pass filter
 
 
 ## Resources
 
 ## Contributors
-
+Anusha Bhattacharyya
+Maxx Smith
+Troy Watts
+Winston Phillips
