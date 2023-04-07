@@ -17,7 +17,7 @@ pip install python-osc
 
 ## Overview:
 
-![process flowchart](img/CapstoneProposalFlowchart.png)
+![process flowchart](img/overview_flowchart.png)
 
 ## Computer Vision
 ### Action Recogniton
