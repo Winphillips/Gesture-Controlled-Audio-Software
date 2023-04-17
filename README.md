@@ -18,6 +18,10 @@ pip install python-osc
 ## Overview:
 
 ![process flowchart](img/flowchart.png)
+![Gain](img/Gain.png)
+![Reverb](img/Reverb.png)
+![Delay](img/Delay.png)
+![Low-Pass Filter](img/Lowpass.png)
 
 ## Computer Vision
 ### Action Recogniton
