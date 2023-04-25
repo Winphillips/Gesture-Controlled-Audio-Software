@@ -1,6 +1,8 @@
 # TODO: ADD pedalboard code directly to this file?
 import PySimpleGUI as sg
 import audioControl
+import pygame.mixer
+from pedalboard.io import AudioStream
 #import live_play
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import AsyncIOOSCUDPServer
@@ -17,6 +19,7 @@ track_lopass = 0
 #TROY: Paths to other files are stored in global constants for easier modification.
 LOGO_PATH = 'img/SW-logo.png'
 SAMPLE_PATH = 'img/sample_camera_image.png'
+AUDIO_PATH = 'audio/base.wav'
 
 #The SOURCE_IP should be the IP address of the device sending the OSC messages.
 SOURCE_IP = "127.0.0.1"
@@ -28,10 +31,14 @@ SOURCE_PORT = "1115"
 ADDRESS_PREFIX = "/GESTURE/set/"
 ADDRESS = "/GESTURE/set/*"
 
+#Input and output names can be different across computers, so defaults are attempted.
+#The "STREAM" devices should be tied to a virtual audio device to loop audio output to input.
+STREAM_INPUT_DEVICE = AudioStream.input_device_names[0]
+STREAM_OUTPUT_DEVICE = AudioStream.output_device_names[0]
+
 # Define the layout of the GUI
 # TODO: ADD Camera feed
 #       ADD Waveform
-#       MAKE play and stop buttons play and stop audio
 layout = [
     [sg.Image(filename=LOGO_PATH, key='-IMAGE-', size=(64, 50),pad=((620,0),(0,0)))],
     [sg.Text('SoundWave', font=('Courier New', 20, "bold"), justification='center', size=(40, 1))],
@@ -60,6 +67,8 @@ def osc_set(address: str, *args):
 osc_dispatcher = Dispatcher()
 osc_dispatcher.map(ADDRESS, osc_set)
 
+
+
 async def gui_loop():
     global queued_changes
     global allow_change
@@ -67,10 +76,16 @@ async def gui_loop():
     # Create the window
     window = sg.Window('SoundWave', layout)
 
+    # Create and initialize the audio player
+    audio_player = pygame.mixer
+    audio_player.init(devicename=STREAM_OUTPUT_DEVICE)
+    audio_player.music.load(filename=AUDIO_PATH)
+
     # The event loop
     while True:
         event, values = window.read(timeout=0.01)
         if event in (sg.WIN_CLOSED, 'Exit'):
+            audio_player.quit()
             break
         #TROY: If queued_changes has any elements, this branch is taken.
         if queued_changes:
@@ -87,8 +102,11 @@ async def gui_loop():
             print(f'Clicked at x={x}, y={y}')
         if event == 'Start':
             window['-IMAGE-'].update(filename=SAMPLE_PATH)
+            #The -1 loops means it will play until stopped.
+            audio_player.music.play(loops=-1)
         if event == 'Stop':
             window['-IMAGE-'].update(filename='')
+            audio_player.music.stop()
 
         # Update the VARIABLES based on the SLIDERS value
         track_gain = values['-GAIN-']
