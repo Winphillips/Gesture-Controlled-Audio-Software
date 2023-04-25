@@ -13,6 +13,10 @@ pip install PySimpleGUI
 ```
 pip install python-osc
 ```
+4. Install [pygame](https://www.pygame.org/)
+```
+pip install pygame
+```
 
 
 ## Overview:
@@ -37,6 +41,7 @@ pip install python-osc
 ### DAW
 -PySimpleGUI for interface
 -pedalboard for audio processing
+-pygame for audio playback
 
 ### parameters
 Gain: -24 to +24
