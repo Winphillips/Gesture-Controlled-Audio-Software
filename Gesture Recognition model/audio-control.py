@@ -22,6 +22,7 @@ import PySimpleGUI as sg
 audio_finished = False
 is_playing = False
 is_paused = False
+exit_requested = False
 
 # Load audio file
 audio_file = './clairdelune.wav'
@@ -54,12 +55,10 @@ pitch_shift_plugin = PitchShift(semitones=0)
 plugins = [
     gain_plugin,
     compressor_plugin,
-    reverb_plugin,
     high_pass_plugin,
     high_shelf_plugin,
     low_pass_plugin,
     low_shelf_plugin,
-    delay_plugin,
     pitch_shift_plugin,
 ]
 
@@ -76,10 +75,26 @@ def callback(outdata, frames, time, status):
     position += frames
     if position >= len(data):
         position = 0
+
+    # Apply all plugins except delay and reverb
     processed_data = indata_float32
     for plugin in pedalboard:
         processed_data = plugin.process(processed_data, sample_rate=samplerate)
-    
+
+    # Apply delay plugin
+    delayed_data = delay_plugin.process(processed_data, sample_rate=samplerate)
+    mixed_data = np.zeros_like(delayed_data)
+    mix = delay_plugin.mix / 100
+    if mix > 0:
+        dry_data = processed_data * (1 - mix)
+        wet_data = delayed_data * mix
+        mixed_data = dry_data + wet_data
+    else:
+        mixed_data = processed_data
+
+    # Apply reverb plugin
+    processed_data = reverb_plugin.process(mixed_data, sample_rate=samplerate)
+
     # Pad the processed_data array with zeros if necessary
     if processed_data.shape[0] < outdata.shape[0]:
         processed_data = np.pad(processed_data, ((0, outdata.shape[0] - processed_data.shape[0]), (0, 0)), mode='constant')
@@ -98,21 +113,37 @@ position = 0
 
 # GUI layout
 layout = [
-    [sg.Image(filename=LOGO_PATH, key='-IMAGE-', size=(64, 50),pad=((620,0),(0,0)))],
-    [sg.Text('SoundWave', font=('Courier New', 20, "bold"), justification='center', size=(40, 1))],
-    [sg.Button('Play', size=(10, 1)), sg.Button('Pause', size=(10, 1)), sg.Button('Resume', size=(10, 1))],
-    [sg.Text('Gain:', size=(10, 1)), sg.Slider(key='-GAIN-', range=(-24, 24), orientation='h', size=(20, 20), default_value=gain_plugin.gain_db)],
-    [sg.Text('Reverb Wet level:', size=(10, 1)), sg.Slider(key='-REVERB-', range=(0.0, 100), orientation='h', size=(20, 20), default_value=reverb_plugin.wet_level)],
-    [sg.Text('Reverb Room size:', size=(10, 1)), sg.Slider(key='-REVERB_ROOM-', range=(0.0, 10), orientation='h', size=(20, 20), default_value=reverb_plugin.room_size)],
-    [sg.Text('Highpass Filter:', size=(10, 1)), sg.Slider(key='-HIGHPASS-', range=(1, 20000), orientation='h', size=(20, 20), default_value=high_pass_plugin.cutoff_frequency_hz)],
-    [sg.Text('Lowpass Filter:', size=(10, 1)), sg.Slider(key='-LOWPASS-', range=(1, 20000), orientation='h', size=(20, 20), default_value=low_pass_plugin.cutoff_frequency_hz)],
-    [sg.Text('High Shelf Filter:', size=(10, 1)), sg.Slider(key='-HIGHSHELF-', range=(1, 20000), orientation='h', size=(20, 20), default_value=high_shelf_plugin.cutoff_frequency_hz)],
-    [sg.Text('Low Shelf Filter:', size=(10, 1)), sg.Slider(key='-LOWSHELF-', range=(1, 20000), orientation='h', size=(20, 20), default_value=low_shelf_plugin.cutoff_frequency_hz)],
-    [sg.Text('Delay Time:', size=(10, 1)), sg.Slider(key='-DEL_TIME-', range=(0.0, 30.0), orientation='h', size=(20, 20), default_value=delay_plugin.delay_seconds)],
-    [sg.Text('Delay Mix:', size=(10, 1)), sg.Slider(key='-DEL_MIX-', range=(0.0, 100), orientation='h', size=(20, 20), default_value=delay_plugin.mix)],
-    [sg.Text('Pitch Shift:', size=(10, 1)), sg.Slider(key='-PITCH-', range=(-24, 24), orientation='h', size=(20, 20), default_value=pitch_shift_plugin.semitones)],
-    [sg.Image(filename='', background_color='turquoise', key='-IMAGE-', size=(400, 240))],
-    [sg.Button('Start', size=(10, 1)), sg.Button('Stop', size=(10, 1)), sg.Button('Exit', size=(10, 1))]
+
+    [sg.Column([[sg.Image(filename=LOGO_PATH, key='-IMAGE-', size=(64, 50),pad=((620,0),(0,0)))],
+    [sg.Text('SoundWave', font=('Courier New', 20, "bold"), justification='center', size=(40, 1))]], 
+               justification='center')],
+    [sg.Column([[sg.Button('Play', size=(10, 1)), 
+                 sg.Button('Pause', size=(10, 1)), 
+                 sg.Button('Resume', size=(10, 1))]], 
+               justification='center')],
+    [
+        sg.Column([
+            [sg.Text('Gain:', size=(10, 1)), sg.Slider(key='-GAIN-', range=(-24, 24), orientation='h', size=(20, 20), default_value=gain_plugin.gain_db)],
+            [sg.Text('Reverb Wet level:', size=(10, 1)), sg.Slider(key='-REVERB-', range=(0.0, 100), orientation='h', size=(20, 20), default_value=reverb_plugin.wet_level)],
+            [sg.Text('Reverb Room size:', size=(10, 1)), sg.Slider(key='-REVERB_ROOM-', range=(0.0, 10), orientation='h', size=(20, 20), default_value=reverb_plugin.room_size)],
+            [sg.Text('Highpass Filter:', size=(10, 1)), sg.Slider(key='-HIGHPASS-', range=(1, 20000), orientation='h', size=(20, 20), default_value=high_pass_plugin.cutoff_frequency_hz)],
+            [sg.Text('High Shelf Filter:', size=(10, 1)), sg.Slider(key='-HIGHSHELF-', range=(1, 20000), orientation='h', size=(20, 20), default_value=high_shelf_plugin.cutoff_frequency_hz)],
+            
+        ]),
+        sg.Column([
+            [sg.Text('Lowpass Filter:', size=(10, 1)), sg.Slider(key='-LOWPASS-', range=(1, 20000), orientation='h', size=(20, 20), default_value=low_pass_plugin.cutoff_frequency_hz)],
+            [sg.Text('Low Shelf Filter:', size=(10, 1)), sg.Slider(key='-LOWSHELF-', range=(1, 20000), orientation='h', size=(20, 20), default_value=low_shelf_plugin.cutoff_frequency_hz)],
+            [sg.Text('Delay Mix:', size=(10, 1)), sg.Slider(key='-DEL_MIX-', range=(0.0, 100), orientation='h', size=(20, 20), default_value=delay_plugin.mix)],
+            [sg.Text('Delay Time:', size=(10, 1)), sg.Slider(key='-DEL_TIME-', range=(0.0, 30.0), orientation='h', size=(20, 20), default_value=delay_plugin.delay_seconds)],
+            [sg.Text('Pitch Shift:', size=(10, 1)), sg.Slider(key='-PITCH-', range=(-24, 24), orientation='h', size=(20, 20), default_value=pitch_shift_plugin.semitones)],
+        ]),
+        sg.Column([
+            [sg.Image(filename='', background_color=None, key='-CAM_IMAGE-', size=(500, 500))],
+            [sg.Button('Start', size=(10, 1)), sg.Button('Stop', size=(10, 1)), sg.Button('Exit', size=(10, 1))],
+        ],pad=((0,0),(100,0)))],
+    [[sg.Text('Output File Name:', size=(15, 1)), sg.InputText(key='-FILENAME-', size=(20, 1))],
+    [sg.Text('File Type:', size=(15, 1)), sg.Combo(['wav', 'aiff', 'ogg', 'flac'], key='-FILETYPE-', default_value='wav', size=(20, 1))],
+    [sg.Button('Save', size=(10, 1))]],
 ]
 
 # Create the window
@@ -122,11 +153,12 @@ window = sg.Window('SoundWave', layout)
 with sd.OutputStream(device=output_device, samplerate=samplerate, channels=2, callback=callback):
 
     # Loop for updating effects during audio playback
-    while not audio_finished:
+    while not audio_finished and not exit_requested:
         event, values = window.read(timeout=0.01)
 
+        #START - STOP - PLAY - PAUSE - RESUME - EXIT
         if event == 'Start':
-            window['-IMAGE-'].update(filename=SAMPLE_PATH)
+            window['-CAM_IMAGE-'].update(filename=SAMPLE_PATH)
 
         if event == 'Stop':
             window['-IMAGE-'].update(filename='')
@@ -139,6 +171,16 @@ with sd.OutputStream(device=output_device, samplerate=samplerate, channels=2, ca
 
         if event == 'Resume':
             is_paused = False
+
+        if event == "Exit" or event == sg.WINDOW_CLOSED:
+            exit_requested = True
+
+        # SAVE
+        if event == 'Save':
+            filename = values['-FILENAME-']
+            file_ext = values['-FILETYPE-']
+            output_file = f'./{filename}.{file_ext}'
+            sf.write(output_file, processed_audio_data, samplerate)
 
         # Update the effects based on the gesture and hand location
         if GESTURE == "ThumbsUp":
@@ -205,6 +247,3 @@ with sd.OutputStream(device=output_device, samplerate=samplerate, channels=2, ca
             # print("\n\nPedalboard:", pedalboard)
             time.sleep(0.1)
     window.close()
-# Save the processed audio data to an output file
-output_file = './output.wav'
-sf.write(output_file, processed_audio_data, samplerate)
