@@ -1,7 +1,4 @@
-| <img src="img/SoundWave-logo.png" width="100" height="100"> | SoundWave |
-|:--:|:--:|
-# SoundWave
-![process flowchart](img/SoundWave-logo.png)
+# SoundWave ![process flowchart](img/SoundWave-logo.png)
 ## Gesture-Controlled-Audio-Software
 *CSCE 4561 - Capstone I/CSCE 4963 Capstone II Project. Using Computer Vision Action Recognition for Gesture Controlling Audio Software VST's.*
 ### Setup
