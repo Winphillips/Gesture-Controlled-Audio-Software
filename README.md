@@ -1,3 +1,5 @@
+| <img src="img/SoundWave-logo.png" width="100" height="100"> | SoundWave |
+|:--:|:--:|
 # SoundWave
 ![process flowchart](img/SoundWave-logo.png)
 ## Gesture-Controlled-Audio-Software
