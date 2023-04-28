@@ -43,7 +43,7 @@ pip install opencv-python
 
 ## Introduction
 
-    Gesture controlled music can offer a more natural and intuitive way of interacting with music, allowing for a more personal touch in music production. Our solution is an audio software application that can be controlled through gesture recognition. This allows users to manipulate audio through simple hand movements, offering a new and engaging way to interact with digital audio.
+Gesture controlled music can offer a more natural and intuitive way of interacting with music, allowing for a more personal touch in music production. Our solution is an audio software application that can be controlled through gesture recognition. This allows users to manipulate audio through simple hand movements, offering a new and engaging way to interact with digital audio.
 
 ## Overview:
 
@@ -53,25 +53,25 @@ pip install opencv-python
 ![Delay](img/Delay.png)
 ![Low-Pass Filter](img/Lowpass.png)
 
-    First, the AI is trained with a set of gestures using video input. This trained AI is then used as an action recognition model, which passes the current gesture and location of the user’s hand to our Audio Control Interface. Using the recognized gesture and location, the interface updates the current audio effect and level, respectively. These updates are shown to the user in the GUI and are made live during playback and applied to the file.
+First, the AI is trained with a set of gestures using video input. This trained AI is then used as an action recognition model, which passes the current gesture and location of the user’s hand to our Audio Control Interface. Using the recognized gesture and location, the interface updates the current audio effect and level, respectively. These updates are shown to the user in the GUI and are made live during playback and applied to the file.
 
 ## Design
 
 ### AI: 
 
-    Our application employs OpenCV, Keras, TensorFlow, and NumPy to track hand movements in real-time, enabling users to control the audio playback through simple gestures. OpenCV, Keras, and TensorFlow capture and process the video stream, while NumPy is used for efficient image manipulation.
+Our application employs OpenCV, Keras, TensorFlow, and NumPy to track hand movements in real-time, enabling users to control the audio playback through simple gestures. OpenCV, Keras, and TensorFlow capture and process the video stream, while NumPy is used for efficient image manipulation.
 
 ### Audio:
 
-    Powered by pedalboard, sounddevice, and soundfile libraries. Our audio processing system allows for real-time audio effects and playback control. Pedalboard offers a range of audio effects, while sounddevice and soundfile allow for audio playback and audio file read/write for controlling audio playback, including play, pause, and stop functionalities.
+Powered by pedalboard, sounddevice, and soundfile libraries. Our audio processing system allows for real-time audio effects and playback control. Pedalboard offers a range of audio effects, while sounddevice and soundfile allow for audio playback and audio file read/write for controlling audio playback, including play, pause, and stop functionalities.
 
 ### GUI: 
 
-    Our software features an intuitive graphical user interface designed with PySimpleGUI, which enables users to control audio playback through individual sliders that represent effect variables, save effected audio files, play/pause/ and resume playback, and see gesture recognition in real time.
+Our software features an intuitive graphical user interface designed with PySimpleGUI, which enables users to control audio playback through individual sliders that represent effect variables, save effected audio files, play/pause/ and resume playback, and see gesture recognition in real time.
 
 ## Possible Future Upgrades
 
-    Potential additions for the future include integrating more audio effects/3rd party VST's and filters, expansion to work with multiple cameras and audio files, song creation/note synthesizing, and overall time optimization. Other use cases could also be included, such as real time "air instruments", user control over home audio devices like TV's, Speakers, etc.,plug and play VST/inst pedalboard, and ASL to speech.
+Potential additions for the future include integrating more audio effects/3rd party VST's and filters, expansion to work with multiple cameras and audio files, song creation/note synthesizing, and overall time optimization. Other use cases could also be included, such as real time "air instruments", user control over home audio devices like TV's, Speakers, etc.,plug and play VST/inst pedalboard, and ASL to speech.
 
 ## Resources
 [Learn about Audio Programming](https://www.theaudioprogrammer.com)
