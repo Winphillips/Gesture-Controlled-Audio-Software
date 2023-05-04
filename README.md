@@ -71,7 +71,7 @@ Our software features an intuitive graphical user interface designed with PySimp
 
 ## Possible Future Upgrades
 
-Potential additions for the future include integrating more audio effects/3rd party VST's and filters, expansion to work with multiple cameras and audio files, song creation/note synthesizing, and overall time optimization. Other use cases could also be included, such as real time "air instruments", user control over home audio devices like TV's, Speakers, etc.,plug and play VST/inst pedalboard, and ASL to speech.
+Potential additions for the future include integrating more audio effects/3rd party VST's and filters, expansion to work with multiple cameras and audio files, song creation/note synthesizing, and overall time optimization. Other use cases could also be included, such as real time "air instruments", user control over home audio devices like TV's, Speakers, etc.,plug and play VST/inst pedalboard, and ASL to speech. The GUI could also have a wavform analyzer linked to the pass filters to help visualize the effects among other things.
 
 ## Resources
 [Learn about Audio Programming](https://www.theaudioprogrammer.com)
