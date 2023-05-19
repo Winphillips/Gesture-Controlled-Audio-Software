@@ -4,6 +4,10 @@
 *CSCE 4561 - Capstone I/CSCE 4963 Capstone II Project. Using Computer Vision Action Recognition for Gesture Controlling Audio Software VST's.*
 [University of Arkansas Capstone Website](https://capstone-csce.uark.edu/fall-2022-spring-2023/team-13-19-fa22/team-19-gesture-controlled-audio-software/)
 
+### Preview
+
+https://github.com/Winphillips/Gesture-Controlled-Audio-Software/assets/98627220/ed5ec0c4-c601-4567-a085-425a99f50e04
+
 ### Setup
 1. Install [pip](https://pip.pypa.io/en/stable/)
 Check version with ```pip -V```, update pip with ```pip install --upgrade pip```
